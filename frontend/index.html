@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <title>Task Management App</title>
+</head>
+<body>
+  <h2>Registration</h2>
+  <form id="register-form">
+    <input type="text" id="reg-name" placeholder="Name" required>
+    <input type="email" id="reg-email" placeholder="Email" required>
+    <input type="password" id="reg-password" placeholder="Password" required>
+    <button type="submit">Registration</button>
+  </form>
+
+  <h2>Login</h2>
+  <form id="login-form">
+    <input type="email" id="username" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button type="submit">Login</button>
+  </form>
+
+  <hr>
+
+  <form id="task-form" style="display:none">
+    <input type="text" id="title" placeholder="Заглавие" required>
+    <input type="text" id="description" placeholder="Описание" required>
+    <button type="submit">Добави задача</button>
+  </form>
+
+  <ul id="task-list"></ul>
+
+  <script src="script.js"></script>
+</body>
+</html>
