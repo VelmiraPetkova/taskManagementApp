@@ -7,7 +7,13 @@ from flask_restful import Api
 from backend.resources.routes import routes
 from db import db
 
-env_config = Config(RepositoryEnv('.env'))
+
+try:
+    env_config = Config(RepositoryEnv('.env'))
+except FileNotFoundError:
+    from decouple import config as env_config
+
+
 
 class DevelopmentConfig:
     FLASK_ENV = 'development'
@@ -18,6 +24,14 @@ class DevelopmentConfig:
         f"mysql+pymysql://{env_config('DB_USER')}:{env_config('DB_PASSWORD')}"
         f"@{env_config('DB_HOST')}:{env_config('DB_PORT')}/{env_config('DB_NAME')}"
     )
+
+class TestingConfig:
+    TESTING = True
+    DEBUG = True
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"  # in-memory DB
+
+
 
 def create_app(config = 'config.DevelopmentConfig'):
     app = Flask(__name__)
