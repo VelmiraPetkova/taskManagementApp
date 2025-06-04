@@ -1,4 +1,5 @@
 from marshmallow import Schema, fields, validate, post_load
+from marshmallow_enum import EnumField
 import uuid
 from datetime import datetime
 
@@ -7,18 +8,20 @@ from backend.schemas.userSchema import UserSchema
 
 
 class TaskSchema(Schema):
-    id = fields.UUID(dump_only=True)
+    id = fields.String(dump_only=True)
     title = fields.String(required=True, validate=validate.Length(min=1, max=255))
     description = fields.String(validate=validate.Length(max=500))
     updated_on = fields.DateTime(required=False, allow_none=True)
-    status = fields.String(
-        required=False,
-        validate=validate.OneOf(
-            [role.value for role in TaskStatus],
-            error="Invalid status type"
-        )
-    )
+    #status = fields.String(
+    #    required=False,
+    #    validate=validate.OneOf(
+    #        [role.value for role in TaskStatus],
+    #        error="Invalid status type"
+    #    )
+    #)
+    status = EnumField(TaskStatus)
     user_id = fields.UUID(required=False, allow_none=True)
+
 
     @post_load
     def set_defaults(self, data, **kwargs):

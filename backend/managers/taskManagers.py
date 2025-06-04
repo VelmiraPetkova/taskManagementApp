@@ -1,10 +1,12 @@
+import uuid
+
 from backend.managers.auth import auth
 from backend.models.enums import TaskStatus
 from backend.models.task import TasksModel
 
 #from models import TasksModel, db
 from sqlalchemy.exc import SQLAlchemyError
-from flask import abort
+from flask import abort, jsonify
 from datetime import datetime, timezone
 
 from db import db
@@ -12,9 +14,8 @@ from db import db
 
 class ManagerTasks:
     @staticmethod
-    def get_tasks_by_user_id():
-        current_user = auth.current_user()
-        return TasksModel.query.filter_by(user_id=current_user.id).all()
+    def get_tasks():
+        return TasksModel.query.all()
 
     @staticmethod
     def create_task(data):
@@ -32,9 +33,9 @@ class ManagerTasks:
         task = TasksModel.query.filter_by(id=task_id).first()
 
         if not task:
-            abort(404, message="Task not found.")
+            abort(404, description="Task not found.")
 
-        allowed_fields = {'title', 'description', 'status', 'user_id'}
+        allowed_fields = {'title', 'description'}
         for key, value in data.items():
             if key in allowed_fields:
                 setattr(task, key, value)
@@ -54,7 +55,7 @@ class ManagerTasks:
     def assign_task(task_id, user_id):
         task = TasksModel.query.filter_by(id=task_id).first()
         if not task:
-            return None  # или хвърли грешка, ако искаш
+            return "Task not found"
 
         task.user_id = user_id
         db.session.commit()

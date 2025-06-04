@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Task Management App</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <h2>Registration</h2>
@@ -22,14 +23,18 @@
 
   <hr>
 
+  <!-- Заглавие "Create new task" и форма -->
+  <h3 id="create-task-title" style="display:none">Create new task</h3>
   <form id="task-form" style="display:none">
-    <input type="text" id="title" placeholder="Заглавие" required>
-    <input type="text" id="description" placeholder="Описание" required>
-    <button type="submit">Добави задача</button>
+    <input type="text" id="title" placeholder="Title" required>
+    <input type="text" id="description" placeholder="Description" required>
+    <button type="submit">Submit</button>
   </form>
 
-  <ul id="task-list"></ul>
+  <!-- Контейнер за задачите -->
+  <div id="task-list"></div>
 
+  <!-- Външен JavaScript -->
   <script src="script.js"></script>
 </body>
 </html>
