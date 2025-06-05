@@ -3,7 +3,8 @@ from datetime import datetime, timedelta, timezone
 import jwt
 from decouple import config
 from flask_httpauth import HTTPTokenAuth
-from jwt.exceptions import InvalidTokenError, InvalidSignatureError
+from jwt.exceptions import InvalidSignatureError
+from jwt import InvalidTokenError
 from werkzeug.exceptions import BadRequest, Unauthorized
 from werkzeug.security import generate_password_hash, check_password_hash
 
