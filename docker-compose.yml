@@ -15,5 +15,33 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
 
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: task-backend
+    restart: always
+    environment:
+      - FLASK_ENV=development
+      - DATABASE_HOST=db
+      - DATABASE_USER=task_user
+      - DATABASE_PASSWORD=task_pass
+      - DATABASE_NAME=task_management
+    ports:
+      - "5001:5001"
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: task-frontend
+    restart: always
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
 volumes:
   mysql_data:
