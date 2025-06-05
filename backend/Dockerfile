@@ -2,7 +2,6 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-COPY .venv .
 COPY ./backend ./backend
 COPY *.py .
 COPY requirements.txt .
