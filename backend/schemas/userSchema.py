@@ -8,7 +8,6 @@ class UserBase(Schema):
     password = fields.String(required=True, load_only=True, validate=validate.Length(min=6,
                                             error="Password must be longer than 6 characters!"))
 
-
 class UserSchema(UserBase):
     id = fields.Method("get_id", dump_only=True)
     name = fields.String(required=True, validate=validate.Length(min=1, max=255))

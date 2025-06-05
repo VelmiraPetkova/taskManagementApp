@@ -127,7 +127,6 @@ async function loadTasks() {
     alert('Error loading tasks.');
     return;
   }
-
   const tasks = await res.json();
   taskList.innerHTML = '';
 
