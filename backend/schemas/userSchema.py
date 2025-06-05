@@ -5,7 +5,8 @@ from backend.models.enums import UserRole
 
 class UserBase(Schema):
     email = fields.Email(required=True, validate=validate.Length(max=100))
-    password = fields.String(required=True, load_only=True, validate=validate.Length(min=6))
+    password = fields.String(required=True, load_only=True, validate=validate.Length(min=6,
+                                            error="Password must be longer than 6 characters!"))
 
 
 class UserSchema(UserBase):

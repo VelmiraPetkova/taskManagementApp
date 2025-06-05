@@ -12,8 +12,8 @@ let taskStatuses = [];
 
 registerForm.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const name = document.getElementById('reg-name').value;
-  const email = document.getElementById('reg-email').value;
+  const name = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
   const password = document.getElementById('reg-password').value;
 
   try {
@@ -24,16 +24,31 @@ registerForm.addEventListener('submit', async (e) => {
     });
 
     const data = await res.json();
+
     if (res.ok) {
       localStorage.setItem('token', data.token);
       afterLogin();
     } else {
-      alert('Registration error: ' + (data.message || 'Invalid data.'));
+      // Проверка както за `errors`, така и за `message` с обект
+      const errorData = data.errors || (typeof data.message === 'object' ? data.message : null);
+
+      if (errorData) {
+        const messages = Object.entries(errorData)
+          .map(([field, msgs]) => {
+            const fieldLabel = field.charAt(0).toUpperCase() + field.slice(1);
+            return `${fieldLabel}: ${Array.isArray(msgs) ? msgs.join(', ') : msgs}`;
+          })
+          .join('\n');
+        alert('Validation errors:\n' + messages);
+      } else {
+        alert('Registration error: ' + (String(data.message) || 'Invalid data.'));
+      }
     }
   } catch (err) {
-    alert('Request error:' + err.message);
+    alert('Request error: ' + err.message);
   }
 });
+
 
 loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
