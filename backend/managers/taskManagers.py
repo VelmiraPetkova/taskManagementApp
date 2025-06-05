@@ -9,6 +9,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from flask import abort, jsonify
 from datetime import datetime, timezone
 
+from backend.models.user import UserModel
 from db import db
 
 
@@ -57,18 +58,23 @@ class ManagerTasks:
         if not task:
             return "Task not found"
 
-        task.user_id = user_id
-        db.session.commit()
-        return task
+        try:
+            valid_user = UserModel.query.filter_by(id=user_id).first()
+            task.user_id = valid_user.id
+            db.session.commit()
+            return task
+        except Exception as ex:
+            raise Exception("Invalid user id")
+
 
     @staticmethod
-    def change_task_status(task_id, new_status_str):
-        try:
-            new_status = TaskStatus[new_status_str]  # Името на Enum члена, не стойността!
-        except KeyError:
-            abort(400, description=f"Invalid status '{new_status_str}'. Valid values are: {', '.join([s.name for s in TaskStatus])}")
+    def change_task_status(new_status, task):
+        status_lookup = {status.name: status for status in TaskStatus}
 
-        task = TasksModel.query.filter_by(id=task_id).first()
-        task.status = new_status
+        if new_status in status_lookup:
+            task.status = status_lookup[new_status]  # подаваме enum, не string
+        else:
+            return {"message": f"Invalid status: {new_status}"}, 400
+
         db.session.commit()
         return task

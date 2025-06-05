@@ -25,7 +25,6 @@ class CreateTasks(Resource):
         return TaskSchema().dump(tasks, many=True)
 
 
-
 # GET, PUT, DELETE by Task ID
 
 class ChangeTaskResource(Resource):
@@ -36,11 +35,9 @@ class ChangeTaskResource(Resource):
         return TaskSchema().dump(updated_task)
 
     @auth.login_required
-    @permission_required([UserRole.superUser])
+    #@permission_required([UserRole.superUser])
     def delete(self, task_id):
         return ManagerTasks.delete_task(task_id)
-
-
 
 # Assign task to a user
 class AssignTaskResource(Resource):
@@ -74,21 +71,13 @@ class ChangeTaskStatusResource(Resource):
 
         data = request.get_json()
         new_status = data.get("status")
-
         if not new_status:
             return {"message": "Missing 'status' in request body"}, 400
 
-        # Правим reverse lookup по стойност
-        status_lookup = {status.name: status for status in TaskStatus}
-        if new_status in status_lookup:
-            task.status = status_lookup[new_status]  # подаваме enum, не string
-        else:
-            return {"message": f"Invalid status: {new_status}"}, 400
-
-        db.session.commit()
+        ManagerTasks.change_task_status(new_status, task)
         return {
             "message": "Task status updated",
-            "status": task.status.value  # връщаме стойноста, не ключа
+            "status": task.status.value
         }, 200
 
 

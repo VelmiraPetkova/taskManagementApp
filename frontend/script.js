@@ -94,12 +94,12 @@ async function loadStatusesAndTasks() {
     const res = await fetch(`${API_URL}/task-statuses`, {
       headers: getAuthHeaders()
     });
-    if (!res.ok) throw new Error('Неуспешно зареждане на статусите.');
-    taskStatuses = await res.json(); // [{key:"notStarted", value:"Not Started"}, ...]
+    if (!res.ok) throw new Error('Failed to load statuses.');
+    taskStatuses = await res.json();
 
     loadTasks();
   } catch (err) {
-    alert('Грешка при зареждане на статусите: ' + err.message);
+    alert('Failed to load statuses. ' + err.message);
   }
 }
 
@@ -131,7 +131,6 @@ async function loadTasks() {
       ? `Assigned to user_id: ${task.user_id}`
       : 'Assigned to: nobody';
 
-    // Показваме updated_on красиво
     const updatedOn = document.createElement('p');
     if (task.updated_on) {
       const date = new Date(task.updated_on);
@@ -145,14 +144,11 @@ async function loadTasks() {
 
     const statusSelect = document.createElement('select');
 
-    // Създаваме опциите - value = key, text = value
-    // защото бекенд-а приема key (enum name) при ъпдейт, а показваме човеко-разбираемо value
     taskStatuses.forEach((state) => {
       const option = document.createElement('option');
-      option.value = state.key; // ключ (enum name)
-      option.text = state.value; // човекочитаема стойност
+      option.value = state.key;
+      option.text = state.value;
 
-      // Селектираме според task.status, който е стойност (пример "Not Started")
       if (task.status === state.key) {
         option.selected = true;
       }
@@ -165,18 +161,17 @@ async function loadTasks() {
         const res = await fetch(`${API_URL}/tasks/${task.id}/status`, {
           method: 'PUT',
           headers: getAuthHeaders(),
-          body: JSON.stringify({ status: statusSelect.value }) // изпращаме ключа (enum name)
+          body: JSON.stringify({ status: statusSelect.value })
         });
 
         const result = await res.json();
-
         if (!res.ok) {
-          alert('Грешка при промяна на статуса: ' + (result.message || 'Неизвестна грешка'));
+          alert('Error changing status: ' + (result.message || 'Error'));
         } else {
           loadTasks();
         }
       } catch (err) {
-        alert('Грешка при изпращане на заявката: ' + err.message);
+        alert('Error sending request: ' + err.message);
       }
     });
 
@@ -215,6 +210,25 @@ async function loadTasks() {
       }
     };
 
+    const deleteBtn = document.createElement('button');
+    deleteBtn.textContent = '🗑️ Delete';
+    deleteBtn.className = 'delete-btn';
+    deleteBtn.onclick = async () => {
+      if (confirm('Are you sure you want to delete this task?')) {
+        const res = await fetch(`${API_URL}/tasks/${task.id}`, {
+          method: 'DELETE',
+          headers: getAuthHeaders()
+        });
+
+        if (res.ok) {
+          loadTasks();
+        } else {
+          const err = await res.json();
+          alert('Delete error: ' + (err.message || 'Unknown error'));
+        }
+      }
+    };
+
     card.appendChild(title);
     card.appendChild(desc);
     card.appendChild(assignedTo);
@@ -223,6 +237,7 @@ async function loadTasks() {
     card.appendChild(statusSelect);
     card.appendChild(editBtn);
     card.appendChild(assignBtn);
+    card.appendChild(deleteBtn);
 
     taskList.appendChild(card);
   });
