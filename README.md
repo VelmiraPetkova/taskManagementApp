@@ -69,7 +69,7 @@ docker-compose down
 ## Screenshots
 <!-- Add screenshots here -->
 <img width="734" alt="image" src="https://github.com/user-attachments/assets/617dae3e-8cc7-43ad-9106-52216e08ffbd" />
-<img width="734" alt="image" src="https://github.com/user-attachments/assets/f46b6f99-23c8-4fdb-ad58-c9fa9e71c862"/>
+<img width="734" alt="image" src="https://github.com/user-attachments/assets/a185726e-c4a4-467a-b879-9b2efd451e8a"/>
 
 
 
