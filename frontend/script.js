@@ -7,6 +7,8 @@ const titleInput = document.getElementById('title');
 const descInput = document.getElementById('description');
 const taskList = document.getElementById('task-list');
 const createTaskTitle = document.getElementById('create-task-title');
+const showUsersBtn = document.getElementById('show-users-btn');
+const userList = document.getElementById('user-list');
 
 let taskStatuses = [];
 
@@ -79,6 +81,7 @@ function afterLogin() {
   loginForm.style.display = 'none';
   taskForm.style.display = 'block';
   createTaskTitle.style.display = 'block';
+  showUsersBtn.style.display = 'inline-block';
   loadStatusesAndTasks();
 }
 
@@ -256,3 +259,25 @@ async function loadTasks() {
     taskList.appendChild(card);
   });
 }
+
+// Show all users
+showUsersBtn.addEventListener('click', async () => {
+  userList.innerHTML = '';
+  userList.style.display = 'block';
+  try {
+    const res = await fetch(`${API_URL}/users`, {
+      headers: getAuthHeaders()
+    });
+
+    if (!res.ok) throw new Error('Failed to load users.');
+    const users = await res.json();
+
+    users.forEach(user => {
+      const div = document.createElement('div');
+      div.textContent = `ID: ${user.id}, Name: ${user.name}, Email: ${user.email}`;
+      userList.appendChild(div);
+    });
+  } catch (err) {
+    alert('Error loading users: ' + err.message);
+  }
+});

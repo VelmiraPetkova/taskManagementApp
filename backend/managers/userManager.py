@@ -13,3 +13,8 @@ class UserManager:
             raise BadRequest('No such user found')
 
         return user
+
+
+    @staticmethod
+    def get_users():
+        return UserModel.query.all()

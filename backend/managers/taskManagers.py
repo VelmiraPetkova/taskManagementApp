@@ -1,12 +1,9 @@
-import uuid
-
-from backend.managers.auth import auth
 from backend.models.enums import TaskStatus
 from backend.models.task import TasksModel
 
 #from models import TasksModel, db
 from sqlalchemy.exc import SQLAlchemyError
-from flask import abort, jsonify
+from flask import abort
 from datetime import datetime, timezone
 
 from backend.models.user import UserModel

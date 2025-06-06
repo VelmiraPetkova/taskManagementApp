@@ -33,7 +33,7 @@ services:
     entrypoint:
       - bash
       - -c
-      - "if [ ! -d /app/migrations/versions ]; then sleep 30 && flask db init && flask db migrate && flask db upgrade; fi"
+      - "if [ ! -d /app/migrations/versions ]; then sleep 60 && flask db init && flask db migrate && flask db upgrade; fi"
     depends_on:
       db:
         condition: service_started

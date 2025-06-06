@@ -1,5 +1,5 @@
-from backend.resources.auth import UserRegisterResource, UserLoginResource
-from backend.resources.taskResource import CreateTasks, ChangeTaskResource, AssignTaskResource, UserTasksResource, \
+from backend.resources.auth import UserRegisterResource, UserLoginResource, UserTakeResource
+from backend.resources.taskResource import CreateTasks, ChangeTaskResource, AssignTaskResource,\
     ChangeTaskStatusResource, TaskStatusesResource
 
 routes = (
@@ -9,7 +9,7 @@ routes = (
     (ChangeTaskResource, '/tasks/<task_id>'),
     (AssignTaskResource, '/tasks/<task_id>/assign'),
     (ChangeTaskStatusResource, '/tasks/<task_id>/status'),
-    (UserTasksResource, '/users/<user_id>/tasks'),
+    (UserTakeResource, '/users'),
     (TaskStatusesResource, '/task-statuses')
 )
 

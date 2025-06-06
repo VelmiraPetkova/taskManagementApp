@@ -23,7 +23,11 @@
 
   <hr>
 
-  <!-- Заглавие "Create new task" и форма -->
+  <!-- Бутон за показване на юзъри -->
+  <button id="show-users-btn" style="display:none">👥 See all users</button>
+  <div id="user-list" style="display:none; margin-top:10px"></div>
+
+  <!-- Заглавие и форма за създаване на задача -->
   <h3 id="create-task-title" style="display:none">Create new task</h3>
   <form id="task-form" style="display:none">
     <input type="text" id="title" placeholder="Title" required>
@@ -34,7 +38,7 @@
   <!-- Контейнер за задачите -->
   <div id="task-list"></div>
 
-  <!-- Външен JavaScript -->
+  <!-- JS файл -->
   <script src="script.js"></script>
 </body>
 </html>

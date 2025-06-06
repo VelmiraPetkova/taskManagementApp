@@ -3,11 +3,10 @@ from flask_restful import Resource
 
 from backend.managers.auth import auth
 from backend.managers.taskManagers import ManagerTasks
-from backend.models.enums import UserRole, TaskStatus
+from backend.models.enums import TaskStatus
 from backend.models.task import TasksModel
 from backend.schemas.taskSchema import TaskSchema
-from backend.utils.decorators import validate_schema, permission_required
-from db import db
+from backend.utils.decorators import validate_schema
 
 
 # Create & List Tasks
@@ -50,15 +49,6 @@ class AssignTaskResource(Resource):
 
         task = ManagerTasks.assign_task(task_id, user_id)
         return TaskSchema().dump(task), 200
-
-
-# Get tasks by user ID
-class UserTasksResource(Resource):
-    @auth.login_required
-    def get(self, user_id):
-        tasks = TasksModel.query.filter_by(user_id=user_id).all()
-        return TaskSchema(many=True).dump(tasks), 200
-
 
 
 #  Change task status by ID
